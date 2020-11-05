@@ -1,0 +1,25 @@
+- honor_timestamps: true
+  job_name: blackbox
+  metrics_path: /probe
+  params:
+    module:
+    - http_2xx
+  relabel_configs:
+  - source_labels:
+    - __address__
+    target_label: __param_target
+  - source_labels:
+    - module
+    target_label: __param_module
+  - source_labels:
+    - __param_target
+    target_label: instance
+  - replacement: mattermost-cm-blackbox-prometheus-blackbox-exporter:9115
+    target_label: __address__
+  scheme: http
+  scrape_interval: 1m
+  scrape_timeout: 30s
+  static_configs:
+  - labels:
+      module: http_2xx
+    targets: []
