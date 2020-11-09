@@ -27,6 +27,7 @@ ENV CLOUD=/cloud-blackbox-target-discovery/main \
 RUN  apk update && apk add libc6-compat && apk add ca-certificates
 COPY --from=build /cloud-blackbox-target-discovery/build/_output/bin/main /cloud-blackbox-target-discovery/main
 COPY --from=build /cloud-blackbox-target-discovery/build/bin /usr/local/bin
+COPY --from=build /cloud-blackbox-target-discovery/scrapeconfig.yml /cloud-blackbox-target-discovery/scrapeconfig.yml
 
 RUN  /usr/local/bin/user_setup
 WORKDIR /cloud-blackbox-target-discovery/

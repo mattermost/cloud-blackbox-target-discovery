@@ -196,7 +196,6 @@ func blackboxTargetDiscovery(envVars *environmentVariables) error {
 	if err != nil {
 		return errors.Wrap(err, "failed to create the Blackbox targets Prometheus secret")
 	}
-
 	log.Info("Successfully updated Blackbox targets")
 
 	return nil
