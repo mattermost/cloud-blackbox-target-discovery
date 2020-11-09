@@ -23,6 +23,7 @@ func send(webhookURL string, payload model.CommandResponse) error {
 		return errors.Wrap(err, "failed tο send HTTP request")
 	}
 	defer resp.Body.Close()
+
 	return nil
 }
 
@@ -44,5 +45,6 @@ func sendMattermostErrorNotification(errorMessage error, message string) error {
 	if err != nil {
 		return errors.Wrap(err, "failed tο send Mattermost error payload")
 	}
+
 	return nil
 }

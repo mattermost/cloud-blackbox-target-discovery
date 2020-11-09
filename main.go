@@ -8,20 +8,19 @@ import (
 	"path/filepath"
 	"strings"
 
-	"gopkg.in/yaml.v2"
-	corev1 "k8s.io/api/core/v1"
-	k8sErrors "k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/route53"
-	"github.com/pingcap/errors"
+	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v2"
+
+	corev1 "k8s.io/api/core/v1"
+	k8sErrors "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-
-	log "github.com/sirupsen/logrus"
 )
 
 type scrapeConfig []struct {
@@ -66,7 +65,7 @@ func main() {
 		if err != nil {
 			log.WithError(err).Error("Failed to send Mattermost error notification")
 		}
-		return
+		os.Exit(1)
 	}
 
 	err = blackboxTargetDiscovery(envVars)
@@ -76,7 +75,7 @@ func main() {
 		if err != nil {
 			log.WithError(err).Error("Failed to send Mattermost error notification")
 		}
-		return
+		os.Exit(1)
 	}
 }
 
@@ -199,13 +198,13 @@ func blackboxTargetDiscovery(envVars *environmentVariables) error {
 	}
 
 	log.Info("Successfully updated Blackbox targets")
+
 	return nil
 }
 
 // getClientSet gets the k8s clientset
 func getClientSet(envVars *environmentVariables) (*kubernetes.Clientset, error) {
 	if envVars.DevMode == "true" {
-
 		kubeconfig := filepath.Join(
 			os.Getenv("HOME"), ".kube", "config",
 		)
@@ -214,10 +213,12 @@ func getClientSet(envVars *environmentVariables) (*kubernetes.Clientset, error) 
 		if err != nil {
 			return nil, err
 		}
+
 		clientset, err := kubernetes.NewForConfig(config)
 		if err != nil {
 			return nil, err
 		}
+
 		return clientset, nil
 	}
 
@@ -225,10 +226,12 @@ func getClientSet(envVars *environmentVariables) (*kubernetes.Clientset, error) 
 	if err != nil {
 		return nil, err
 	}
+
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}
+
 	return clientset, nil
 }
 
@@ -294,6 +297,7 @@ func getBlackBoxTargets(publicRecords, privateRecords []*route53.ResourceRecordS
 		blackBoxTargets = append(blackBoxTargets, target)
 	}
 	log.Info("Returning Blackbox targets")
+
 	return blackBoxTargets
 }
 
@@ -306,6 +310,7 @@ func isExcludedTarget(excludedTargets []string, record string) bool {
 			}
 		}
 	}
+
 	return false
 }
 
