@@ -23,3 +23,33 @@
   - labels:
       module: http_2xx
     targets: []
+- honor_timestamps: true
+  scheme: http
+  job_name: bind-server-1
+  metrics_path: /metrics
+  scrape_interval: 1m
+  scrape_timeout: 30s
+  static_configs:
+    - targets: []
+      labels:
+        alias: bind-server-1
+- honor_timestamps: true
+  scheme: http
+  job_name: bind-server-2
+  metrics_path: /metrics
+  scrape_interval: 1m
+  scrape_timeout: 30s
+  static_configs:
+    - targets: []
+      labels:
+        alias: bind-server-2
+- honor_timestamps: true
+  job_name: bind-server-3
+  metrics_path: /metrics
+  scrape_interval: 1m
+  scrape_timeout: 30s
+  scheme: http
+  static_configs:
+    - targets: []
+      labels:
+        alias: bind-server-3
