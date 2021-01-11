@@ -102,16 +102,12 @@ func validateAndGetEnvVars() (*environmentVariables, error) {
 	envVars.PrometheusNamespace = prometheusNamespace
 
 	excludedTargets := os.Getenv("EXCLUDED_TARGETS")
-	if len(excludedTargets) == 0 {
-		envVars.ExcludedTargets = []string{}
-	} else {
+	if len(excludedTargets) > 0 {
 		envVars.ExcludedTargets = strings.Split(excludedTargets, ",")
 	}
 
 	additionalTargets := os.Getenv("ADDITIONAL_TARGETS")
-	if len(additionalTargets) == 0 {
-		envVars.AdditionalTargets = []string{}
-	} else {
+	if len(additionalTargets) > 0 {
 		envVars.AdditionalTargets = strings.Split(additionalTargets, ",")
 	}
 
@@ -135,9 +131,7 @@ func validateAndGetEnvVars() (*environmentVariables, error) {
 	}
 
 	bindServers := os.Getenv("BIND_SERVERS")
-	if len(bindServers) == 0 {
-		envVars.BindServers = []string{}
-	} else {
+	if len(bindServers) > 0 {
 		envVars.BindServers = strings.Split(bindServers, ",")
 	}
 
