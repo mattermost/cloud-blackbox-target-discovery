@@ -284,8 +284,10 @@ func listAllRecordSets(hostedZoneID string) ([]*route53.ResourceRecordSet, error
 func getBlackBoxTargets(publicRecords, privateRecords []*route53.ResourceRecordSet, additionalTargets, excludedTargets []string) []string {
 	blackBoxTargets := []string{}
 	for _, record := range publicRecords {
-		if !isExcludedTarget(excludedTargets, *record.Name) && !strings.HasPrefix(*record.Name, "_") {
-			blackBoxTargets = append(blackBoxTargets, fmt.Sprintf("%s/api/v4/system/ping", *record.Name))
+		if record.SetIdentifier != nil {
+			if !isExcludedTarget(excludedTargets, *record.Name) && !strings.HasPrefix(*record.Name, "_") && !strings.Contains(*record.SetIdentifier, "[hibernating]") {
+				blackBoxTargets = append(blackBoxTargets, fmt.Sprintf("%s/api/v4/system/ping", *record.Name))
+			}
 		}
 
 	}
