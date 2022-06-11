@@ -286,7 +286,8 @@ func getBlackBoxTargets(publicRecords, privateRecords []*route53.ResourceRecordS
 	for _, record := range publicRecords {
 		if record.SetIdentifier != nil {
 			if !isExcludedTarget(excludedTargets, *record.Name) && !strings.HasPrefix(*record.Name, "_") && !strings.Contains(*record.SetIdentifier, "[hibernating]") {
-				blackBoxTargets = append(blackBoxTargets, fmt.Sprintf("%s/api/v4/system/ping", *record.Name))
+				record := strings.TrimSuffix(*record.Name, ".")
+				blackBoxTargets = append(blackBoxTargets, fmt.Sprintf("%s/api/v4/system/ping", record))
 			}
 		}
 
