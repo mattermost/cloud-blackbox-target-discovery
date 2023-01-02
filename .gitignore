@@ -1,4 +1,4 @@
 coverage.out
 .vscode
 build/_output/
-.idea
+.idea.git/
